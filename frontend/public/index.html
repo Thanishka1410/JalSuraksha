@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <meta
+      name="description"
+      content="JalRakshak AI - Rural Water Supply Monitoring Platform"
+    />
+    <meta name="keywords" content="water supply, rural monitoring, water quality, IoT, AI" />
+    <meta name="author" content="JalRakshak AI" />
+    <meta property="og:title" content="JalRakshak AI" />
+    <meta property="og:description" content="Rural Water Supply Monitoring Platform" />
+    <meta property="og:type" content="website" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>JalRakshak AI - Rural Water Supply Monitoring</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      .initial-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f0f9ff 0%, #ccfbf1 100%);
+      }
+      .initial-loader.dark {
+        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      }
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #e0f2fe;
+        border-top-color: #0ea5e9;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loader-text {
+        margin-top: 16px;
+        color: #64748b;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div class="initial-loader" id="initial-loader">
+        <div class="spinner"></div>
+        <p class="loader-text">Loading JalRakshak AI...</p>
+      </div>
+    </div>
+    <script>
+      // Check for dark mode preference
+      if (
+        localStorage.getItem('jalrakshak_theme') === 'dark' ||
+        (!localStorage.getItem('jalrakshak_theme') &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.getElementById('initial-loader').classList.add('dark');
+      }
+    </script>
+  </body>
+</html>
