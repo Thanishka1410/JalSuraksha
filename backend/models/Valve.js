@@ -34,9 +34,23 @@ const ValveSchema = new mongoose.Schema({
   lastChecked: {
     type: Date
   },
+  lastOperated: {
+    type: Date
+  },
   diameter: {
     type: Number,
     min: [0, 'Diameter cannot be negative']
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number],
+      default: [0, 0]
+    }
   }
 }, {
   timestamps: true

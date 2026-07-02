@@ -53,14 +53,14 @@ const autoSeed = async () => {
     const tank2 = await WaterTank.create({ name: 'Underground Tank - East', tankId: 'TNK002', village: village._id, location: { type: 'Point', coordinates: [81.6305, 21.2512] }, capacity: 30000, currentLevel: 5000, dailyConsumption: 5000, type: 'underground', status: 'low', lastRefilled: new Date('2024-03-05') });
     console.log('Tanks seeded');
 
-    const pipeline1 = await Pipeline.create({ name: 'Main Distribution Pipeline', pipelineId: 'PIPE001', village: village._id, length: 2500, diameter: 150, material: 'HDPE', status: 'good', installationDate: new Date('2022-06-01') });
-    const pipeline2 = await Pipeline.create({ name: 'Secondary Pipeline - East', pipelineId: 'PIPE002', village: village._id, length: 1200, diameter: 100, material: 'PVC', status: 'fair', leakReports: [{ reportedBy: citizen._id, reportedAt: new Date('2024-03-08'), description: 'Small leak near junction box', status: 'reported' }], installationDate: new Date('2023-01-15') });
+    const pipeline1 = await Pipeline.create({ name: 'Main Distribution Pipeline', pipelineId: 'PIPE001', village: village._id, length: 2500, diameter: 150, material: 'HDPE', status: 'good', installationDate: new Date('2022-06-01'), coordinates: { type: 'LineString', coordinates: [[81.6296, 21.2514],[81.6300, 21.2510],[81.6305, 21.2512],[81.6310, 21.2515]] } });
+    const pipeline2 = await Pipeline.create({ name: 'Secondary Pipeline - East', pipelineId: 'PIPE002', village: village._id, length: 1200, diameter: 100, material: 'PVC', status: 'fair', leakReports: [{ reportedBy: citizen._id, reportedAt: new Date('2024-03-08'), description: 'Small leak near junction box', status: 'reported' }], installationDate: new Date('2023-01-15'), coordinates: { type: 'LineString', coordinates: [[81.6305, 21.2512],[81.6308, 21.2508],[81.6312, 21.2505]] } });
     console.log('Pipelines seeded');
 
-    await Valve.create({ name: 'Main Gate Valve', valveId: 'VLV001', village: village._id, pipeline: pipeline1._id, status: 'open', type: 'gate', lastChecked: new Date('2024-03-10'), diameter: 150 });
-    await Valve.create({ name: 'Secondary Gate Valve', valveId: 'VLV002', village: village._id, pipeline: pipeline1._id, status: 'closed', type: 'gate', lastChecked: new Date('2024-03-10'), diameter: 100 });
-    await Valve.create({ name: 'East Pipeline Butterfly Valve', valveId: 'VLV003', village: village._id, pipeline: pipeline2._id, status: 'partially_open', type: 'butterfly', lastChecked: new Date('2024-03-09'), diameter: 100 });
-    await Valve.create({ name: 'Check Valve - Pump Station', valveId: 'VLV004', village: village._id, pipeline: pipeline1._id, status: 'open', type: 'check', lastChecked: new Date('2024-03-10'), diameter: 150 });
+    await Valve.create({ name: 'Main Gate Valve', valveId: 'VLV001', village: village._id, pipeline: pipeline1._id, status: 'open', type: 'gate', lastChecked: new Date('2024-03-10'), diameter: 150, location: { type: 'Point', coordinates: [81.6300, 21.2510] } });
+    await Valve.create({ name: 'Secondary Gate Valve', valveId: 'VLV002', village: village._id, pipeline: pipeline1._id, status: 'closed', type: 'gate', lastChecked: new Date('2024-03-10'), diameter: 100, location: { type: 'Point', coordinates: [81.6305, 21.2512] } });
+    await Valve.create({ name: 'East Pipeline Butterfly Valve', valveId: 'VLV003', village: village._id, pipeline: pipeline2._id, status: 'partially_open', type: 'butterfly', lastChecked: new Date('2024-03-09'), diameter: 100, location: { type: 'Point', coordinates: [81.6308, 21.2508] } });
+    await Valve.create({ name: 'Check Valve - Pump Station', valveId: 'VLV004', village: village._id, pipeline: pipeline1._id, status: 'open', type: 'check', lastChecked: new Date('2024-03-10'), diameter: 150, location: { type: 'Point', coordinates: [81.6296, 21.2514] } });
     console.log('Valves seeded');
 
     const statuses = ['safe', 'safe', 'needs_inspection', 'unsafe', 'safe'];
@@ -108,6 +108,8 @@ app.use('/api/v1/alerts', require('./routes/alerts'));
 app.use('/api/v1/analytics', require('./routes/analytics'));
 app.use('/api/v1/ai', require('./routes/ai'));
 app.use('/api/v1/upload', require('./routes/upload'));
+app.use('/api/v1/schedule', require('./routes/schedule'));
+
 
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({

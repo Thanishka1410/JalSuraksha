@@ -59,6 +59,17 @@ const PipelineSchema = new mongoose.Schema({
   leakReports: [LeakReportSchema],
   installationDate: {
     type: Date
+  },
+  coordinates: {
+    type: {
+      type: String,
+      enum: ['LineString'],
+      default: 'LineString'
+    },
+    coordinates: {
+      type: [[Number]],
+      default: []
+    }
   }
 }, {
   timestamps: true

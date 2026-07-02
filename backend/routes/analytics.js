@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getWaterConsumptionAnalytics, getPumpEfficiencyAnalytics, getQualityTrendsAnalytics, getComplaintAnalytics, getMaintenanceCostAnalytics, generateReport } = require('../controllers/analyticsController');
+const { getWaterConsumptionAnalytics, getPumpEfficiencyAnalytics, getQualityTrendsAnalytics, getComplaintAnalytics, getMaintenanceCostAnalytics, generateReport, getVillageHealthScores } = require('../controllers/analyticsController');
 const { authenticate } = require('../middleware/auth');
 
 const Pump = require('../models/Pump');
@@ -93,5 +93,6 @@ router.get('/quality-trends', authenticate, getQualityTrendsAnalytics);
 router.get('/complaints', authenticate, getComplaintAnalytics);
 router.get('/maintenance-cost', authenticate, getMaintenanceCostAnalytics);
 router.get('/report', authenticate, generateReport);
+router.get('/village-health-scores', authenticate, getVillageHealthScores);
 
 module.exports = router;

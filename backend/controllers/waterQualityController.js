@@ -1,7 +1,10 @@
 const WaterQuality = require('../models/WaterQuality');
 const Alert = require('../models/Alert');
+const User = require('../models/User');
+const Village = require('../models/Village');
 const { calculateWaterQualityStatus } = require('../utils/helpers');
 const { WATER_QUALITY_THRESHOLDS } = require('../config/constants');
+const { sendWaterQualityAlertEmail } = require('../utils/emailService');
 
 const createWaterQuality = async (req, res) => {
   try {
@@ -29,6 +32,12 @@ const createWaterQuality = async (req, res) => {
         message: `Water quality test on ${new Date(sampleDate).toLocaleDateString()} showed unsafe levels. Immediate action required.`,
         relatedEntity: { model: 'WaterQuality', id: waterQuality._id }
       });
+      // Notify GP admin (non-blocking)
+      Village.findById(village).populate('gpAdmin', 'name email').then(vil => {
+        if (vil && vil.gpAdmin && vil.gpAdmin.email) {
+          sendWaterQualityAlertEmail(vil.gpAdmin.email, vil.gpAdmin.name, waterQuality, vil.name);
+        }
+      }).catch(() => {});
     } else if (overallStatus === 'needs_inspection') {
       await Alert.create({
         village,
@@ -38,6 +47,12 @@ const createWaterQuality = async (req, res) => {
         message: `Water quality test on ${new Date(sampleDate).toLocaleDateString()} shows parameters near threshold. Inspection recommended.`,
         relatedEntity: { model: 'WaterQuality', id: waterQuality._id }
       });
+      // Notify GP admin (non-blocking)
+      Village.findById(village).populate('gpAdmin', 'name email').then(vil => {
+        if (vil && vil.gpAdmin && vil.gpAdmin.email) {
+          sendWaterQualityAlertEmail(vil.gpAdmin.email, vil.gpAdmin.name, waterQuality, vil.name);
+        }
+      }).catch(() => {});
     }
 
     res.status(201).json({

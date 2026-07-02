@@ -1,5 +1,7 @@
 const Complaint = require('../models/Complaint');
 const Alert = require('../models/Alert');
+const User = require('../models/User');
+const { sendComplaintAssignmentEmail, sendComplaintStatusUpdateEmail } = require('../utils/emailService');
 
 const createComplaint = async (req, res) => {
   try {
@@ -166,6 +168,13 @@ const assignComplaint = async (req, res) => {
 
     await complaint.save();
 
+    // Send email notification to assigned technician (non-blocking)
+    User.findById(assignedTo).then(tech => {
+      if (tech && tech.email) {
+        sendComplaintAssignmentEmail(tech.email, tech.name, complaint);
+      }
+    }).catch(() => {});
+
     res.status(200).json({
       success: true,
       message: 'Complaint assigned successfully',
@@ -206,6 +215,17 @@ const updateComplaintStatus = async (req, res) => {
     });
 
     await complaint.save();
+
+    // Send email notification to complainant (non-blocking)
+    const notifyStatuses = ['assigned', 'in_progress', 'resolved', 'closed'];
+    if (notifyStatuses.includes(status)) {
+      Complaint.findById(complaint._id).populate('complainant', 'name email').then(populated => {
+        const citizen = populated?.complainant;
+        if (citizen && citizen.email) {
+          sendComplaintStatusUpdateEmail(citizen.email, citizen.name, complaint, status);
+        }
+      }).catch(() => {});
+    }
 
     res.status(200).json({
       success: true,

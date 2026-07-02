@@ -302,11 +302,78 @@ const generateReport = async (req, res) => {
   }
 };
 
+const Village = require('../models/Village');
+
+const getVillageHealthScores = async (req, res) => {
+  try {
+    const villages = await Village.find({});
+    const scores = await Promise.all(
+      villages.map(async (v) => {
+        const [pumps, tanks, complaints, qualityRecords] = await Promise.all([
+          Pump.find({ village: v._id }),
+          WaterTank.find({ village: v._id }),
+          Complaint.find({ village: v._id }),
+          WaterQuality.find({ village: v._id }).sort({ sampleDate: -1 }).limit(5),
+        ]);
+
+        // Pump score (0-25): avg efficiency of running pumps
+        const runningPumps = pumps.filter(p => p.status === 'running');
+        const pumpScore = runningPumps.length > 0
+          ? Math.round((runningPumps.reduce((s, p) => s + p.efficiencyScore, 0) / runningPumps.length) * 0.25)
+          : 0;
+
+        // Tank score (0-25): avg fill level
+        const tankScore = tanks.length > 0
+          ? Math.round((tanks.reduce((s, t) => s + (t.capacity > 0 ? (t.currentLevel / t.capacity) * 100 : 0), 0) / tanks.length) * 0.25)
+          : 0;
+
+        // Quality score (0-25): ratio of safe records
+        const safeCount = qualityRecords.filter(r => r.overallStatus === 'safe').length;
+        const qualityScore = qualityRecords.length > 0
+          ? Math.round((safeCount / qualityRecords.length) * 25)
+          : 20;
+
+        // Complaint resolution score (0-25): resolution rate
+        const resolved = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
+        const complaintScore = complaints.length > 0
+          ? Math.round((resolved / complaints.length) * 25)
+          : 25;
+
+        const totalScore = pumpScore + tankScore + qualityScore + complaintScore;
+        const grade = totalScore >= 85 ? 'A' : totalScore >= 70 ? 'B' : totalScore >= 55 ? 'C' : 'D';
+
+        return {
+          village: { _id: v._id, name: v.name, district: v.district },
+          score: totalScore,
+          grade,
+          breakdown: { pumpScore, tankScore, qualityScore, complaintScore },
+          details: {
+            totalPumps: pumps.length,
+            runningPumps: runningPumps.length,
+            totalTanks: tanks.length,
+            avgTankLevel: tanks.length > 0 ? Math.round(tanks.reduce((s, t) => s + (t.capacity > 0 ? (t.currentLevel / t.capacity) * 100 : 0), 0) / tanks.length) : 0,
+            totalComplaints: complaints.length,
+            resolvedComplaints: resolved,
+            latestQualityStatus: qualityRecords.length > 0 ? qualityRecords[0].overallStatus : 'unknown',
+          }
+        };
+      })
+    );
+
+    scores.sort((a, b) => b.score - a.score);
+
+    res.status(200).json({ success: true, data: { scores } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching village health scores', error: error.message });
+  }
+};
+
 module.exports = {
   getWaterConsumptionAnalytics,
   getPumpEfficiencyAnalytics,
   getQualityTrendsAnalytics,
   getComplaintAnalytics,
   getMaintenanceCostAnalytics,
-  generateReport
+  generateReport,
+  getVillageHealthScores,
 };

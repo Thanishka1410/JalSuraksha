@@ -17,9 +17,10 @@ import MapsPage from './pages/MapsPage';
 import AlertsPage from './pages/AlertsPage';
 import AIAssistantPage from './pages/AIAssistantPage';
 import SettingsPage from './pages/SettingsPage';
+import SchedulePage from './pages/SchedulePage';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }): React.ReactElement | null => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -33,7 +34,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
-const RoleRoute: React.FC<{ children: React.ReactNode; allowedRoles: string[] }> = ({ children, allowedRoles }) => {
+const RoleRoute = ({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }): React.ReactElement | null => {
   const { user } = useAuth();
   if (!user || !allowedRoles.includes(user.role)) {
     return <Navigate to="/dashboard" replace />;
@@ -41,7 +42,7 @@ const RoleRoute: React.FC<{ children: React.ReactNode; allowedRoles: string[] }>
   return <>{children}</>;
 };
 
-const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PublicRoute = ({ children }: { children: React.ReactNode }): React.ReactElement | null => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -55,7 +56,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
 };
 
-const AppRoutes: React.FC = () => {
+const AppRoutes = (): React.ReactElement => {
   return (
     <Routes>
       <Route
@@ -128,13 +129,14 @@ const AppRoutes: React.FC = () => {
           </RoleRoute>
         } />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="schedule" element={<SchedulePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };
 
-const App: React.FC = () => {
+const App = (): React.ReactElement => {
   return (
     <I18nProvider>
     <ThemeProvider>

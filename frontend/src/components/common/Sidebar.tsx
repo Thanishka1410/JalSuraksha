@@ -16,9 +16,11 @@ import {
   ChevronRight,
   Wrench,
   ClipboardList,
+  CalendarClock,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getInitials } from '../../utils/helpers';
+
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -32,6 +34,7 @@ const allNavItems = [
   { path: '/infrastructure', label: 'Infrastructure', icon: Wrench, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'district_officer'] },
   { path: '/quality', label: 'Water Quality', icon: Droplets, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
   { path: '/complaints', label: 'Complaints', icon: ClipboardList, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+  { path: '/schedule', label: 'Schedule', icon: CalendarClock, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
   { path: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['super_admin', 'district_officer'] },
   { path: '/maps', label: 'Maps', icon: Map, roles: ['super_admin', 'gp_admin', 'district_officer'] },
   { path: '/alerts', label: 'Alerts', icon: Bell, roles: ['super_admin', 'gp_admin', 'district_officer'] },

@@ -93,6 +93,10 @@ export interface Valve {
   diameter: number;
   lastChecked?: string;
   lastOperated?: string;
+  location?: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -109,9 +113,54 @@ export interface Pipeline {
   leakCount?: number;
   leakReports?: any[];
   installationDate?: string;
+  coordinates?: {
+    type: 'LineString';
+    coordinates: [number, number][];
+  };
   createdAt: string;
   updatedAt: string;
 }
+
+export interface WaterScheduleSlot {
+  zone: string;
+  startTime: string;
+  endTime: string;
+  durationMinutes?: number;
+}
+
+export interface WaterSchedule {
+  _id: string;
+  village: Village | string;
+  dayOfWeek: string;
+  slots: WaterScheduleSlot[];
+  notes?: string;
+  isActive: boolean;
+  createdBy?: User | string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface VillageHealthScore {
+  village: { _id: string; name: string; district: string };
+  score: number;
+  grade: 'A' | 'B' | 'C' | 'D';
+  breakdown: {
+    pumpScore: number;
+    tankScore: number;
+    qualityScore: number;
+    complaintScore: number;
+  };
+  details: {
+    totalPumps: number;
+    runningPumps: number;
+    totalTanks: number;
+    avgTankLevel: number;
+    totalComplaints: number;
+    resolvedComplaints: number;
+    latestQualityStatus: string;
+  };
+}
+
 
 export interface WaterQuality {
   _id: string;
