@@ -34,7 +34,6 @@ const QualityDistributionChart: React.FC<QualityDistributionChartProps> = ({
     );
   }
 
-  const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
