@@ -11,7 +11,6 @@ const WaterScheduleSchema = new mongoose.Schema({
   village: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Village',
-    required: [true, 'Village is required'],
   },
   dayOfWeek: {
     type: String,
