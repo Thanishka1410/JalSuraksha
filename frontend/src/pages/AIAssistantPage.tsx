@@ -53,10 +53,16 @@ const AIAssistantPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiPost<{ data: ChatMessageType }>('/ai/chat', {
+      const response = await apiPost<{ success: boolean; data: { response: string; suggestions: string[] } }>('/ai/chat', {
         message: text,
       });
-      setMessages((prev) => [...prev, response.data]);
+      const assistantMessage: ChatMessageType = {
+        _id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: response.data?.response || 'No response received.',
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       // Mock response
       const mockResponse: ChatMessageType = {
