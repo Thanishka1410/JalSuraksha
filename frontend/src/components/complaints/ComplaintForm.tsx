@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, MapPin, Upload, X } from 'lucide-react';
 import Modal from '../common/Modal';
 import toast from 'react-hot-toast';
+import { apiGet } from '../../utils/api';
 
+// Must match backend constants: COMPLAINT_CATEGORIES & PRIORITY_LEVELS
 const complaintSchema = z.object({
-  category: z.enum(['water_quality', 'supply', 'infrastructure', 'billing', 'other']),
-  title: z.string().min(5, 'Title must be at least 5 characters'),
+  category: z.enum(['leakage', 'no_water', 'dirty_water', 'low_pressure', 'other']),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  priority: z.enum(['low', 'medium', 'high', 'critical']),
+  priority: z.enum(['low', 'medium', 'high', 'urgent']),
   village: z.string().min(1, 'Village is required'),
 });
 
@@ -24,17 +25,26 @@ interface ComplaintFormProps {
 }
 
 const prioritySuggestions: Record<string, string> = {
-  water_quality: 'high',
-  supply: 'medium',
-  infrastructure: 'medium',
-  billing: 'low',
+  leakage: 'high',
+  no_water: 'urgent',
+  dirty_water: 'high',
+  low_pressure: 'medium',
   other: 'low',
+};
+
+const categoryLabels: Record<string, string> = {
+  leakage: 'Pipe Leakage',
+  no_water: 'No Water Supply',
+  dirty_water: 'Dirty / Contaminated Water',
+  low_pressure: 'Low Water Pressure',
+  other: 'Other',
 };
 
 const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit, loading }) => {
   const [images, setImages] = useState<File[]>([]);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isCapturingLocation, setIsCapturingLocation] = useState(false);
+  const [villages, setVillages] = useState<{ _id: string; name: string; code: string }[]>([]);
 
   const {
     register,
@@ -45,12 +55,26 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
   } = useForm<ComplaintFormData>({
     resolver: zodResolver(complaintSchema),
     defaultValues: {
-      category: 'water_quality',
+      category: 'leakage',
       priority: 'medium',
     },
   });
 
   const watchCategory = watch('category');
+
+  // Fetch real villages from backend
+  useEffect(() => {
+    if (isOpen) {
+      apiGet('/villages')
+        .then((res: any) => {
+          const list = res?.data?.villages || [];
+          setVillages(list);
+        })
+        .catch(() => {
+          // silently ignore — village dropdown will be empty
+        });
+    }
+  }, [isOpen]);
 
   const captureLocation = () => {
     setIsCapturingLocation(true);
@@ -101,28 +125,10 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
             {...register('category')}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
-            <option value="water_quality">Water Quality</option>
-            <option value="supply">Water Supply</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="billing">Billing</option>
-            <option value="other">Other</option>
+            {Object.entries(categoryLabels).map(([val, label]) => (
+              <option key={val} value={val}>{label}</option>
+            ))}
           </select>
-        </div>
-
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Title
-          </label>
-          <input
-            {...register('title')}
-            type="text"
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-            placeholder="Brief description of the issue"
-          />
-          {errors.title && (
-            <p className="mt-1 text-sm text-danger-500">{errors.title.message}</p>
-          )}
         </div>
 
         {/* Description */}
@@ -154,7 +160,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
-              <option value="critical">Critical</option>
+              <option value="urgent">Urgent</option>
             </select>
             <p className="text-xs text-gray-500 mt-1">
               Suggested: {prioritySuggestions[watchCategory]}
@@ -169,9 +175,9 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Select Village</option>
-              <option value="village1">Rampur</option>
-              <option value="village2">Shantipur</option>
-              <option value="village3">Govindpur</option>
+              {villages.map((v) => (
+                <option key={v._id} value={v._id}>{v.name} ({v.code})</option>
+              ))}
             </select>
             {errors.village && (
               <p className="mt-1 text-sm text-danger-500">{errors.village.message}</p>
@@ -188,11 +194,11 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
             className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             <MapPin className="w-4 h-4" />
-            {location ? 'Location Captured' : 'Capture GPS Location'}
+            {isCapturingLocation ? 'Capturing...' : location ? 'Location Captured ✓' : 'Capture GPS Location'}
           </button>
           {location && (
             <p className="text-sm text-gray-500 mt-2">
-              {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+              📍 {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
             </p>
           )}
         </div>
