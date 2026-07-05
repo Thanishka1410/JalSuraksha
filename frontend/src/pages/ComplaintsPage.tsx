@@ -48,8 +48,12 @@ const ComplaintsPage: React.FC = () => {
       }
 
       // Step 2: Submit complaint with image URLs
-      const { images, ...rest } = formData;
-      await apiPost('/complaints', { ...rest, images: imageUrls });
+      const { images, location, ...rest } = formData;
+      const payload: any = { ...rest, images: imageUrls };
+      if (location) {
+        payload.location = { type: 'Point', coordinates: [location.lng, location.lat] };
+      }
+      await apiPost('/complaints', payload);
       toast.success('Complaint submitted successfully');
       refetch();
     } catch (error) {

@@ -41,6 +41,8 @@ const te: Translations = {
     description: 'వివరణ',
     priority: 'ప్రాధాన్యత',
     village: 'గ్రామం',
+    villagePlaceholder: 'గ్రామం పేరు టైప్ చేయండి...',
+    noVillagesFound: 'గ్రామాలు కనుగొనబడలేదు',
     captureLocation: 'GPS స్థానాన్ని నమోదు చేయండి',
     locationCaptured: 'స్థానం నమోదు అయింది',
     uploadPhotos: 'ఫోటోలు (ఐచ్ఛికం, గరిష్టంగా 5)',
@@ -90,6 +92,14 @@ const te: Translations = {
     markRead: 'చదివినట్లు గుర్తించండి',
     acknowledge: 'అంగీకరించండి',
     resolve: 'పరిష్కరించండి',
+  },
+  maps: {
+    title: 'మ్యాప్‌లు',
+    subtitle: 'ఇంటరాక్టివ్ GIS మ్యాప్ వీక్షణ',
+  },
+  aiAssistant: {
+    title: 'AI సహాయకుడు',
+    subtitle: 'నీటి సరఫరా గురించి ప్రశ్నలు అడగండి',
   },
   settings: {
     title: 'సెట్టింగులు',

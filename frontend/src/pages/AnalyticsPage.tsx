@@ -85,10 +85,12 @@ const ComplaintTrendsReport: React.FC<{ data: ComplaintTrendsData | null; loadin
 const GRADE_COLORS: Record<string, string> = { A: '#22c55e', B: '#0ea5e9', C: '#f59e0b', D: '#ef4444' };
 
 const HealthScoreReport: React.FC<{ data: { scores: VillageHealthScore[] } | null; loading: boolean }> = ({ data, loading }) => {
+  const [selectedIdx, setSelectedIdx] = useState(0);
+
   if (loading) return <div className="flex justify-center py-24"><Loader2 className="w-10 h-10 animate-spin text-primary-400" /></div>;
   if (!data?.scores?.length) return <div className="text-center py-20 text-gray-400">No village data available.</div>;
 
-  const [selected, setSelected] = useState(data.scores[0]);
+  const selected = data.scores[selectedIdx] ?? data.scores[0];
 
   return (
     <div className="space-y-6 p-4">
@@ -96,9 +98,9 @@ const HealthScoreReport: React.FC<{ data: { scores: VillageHealthScore[] } | nul
         {data.scores.map(vs => (
           <button
             key={vs.village._id}
-            onClick={() => setSelected(vs)}
+            onClick={() => setSelectedIdx(data.scores.indexOf(vs))}
             className={`text-left p-4 rounded-2xl border-2 transition-all ${
-              selected?.village._id === vs.village._id
+              selected.village._id === vs.village._id
                 ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-primary-300'
             }`}

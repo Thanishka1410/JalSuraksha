@@ -41,6 +41,8 @@ const hi: Translations = {
     description: 'विवरण',
     priority: 'प्राथमिकता',
     village: 'गांव',
+    villagePlaceholder: 'गांव का नाम टाइप करें...',
+    noVillagesFound: 'कोई गांव नहीं मिला',
     captureLocation: 'GPS स्थान कैप्चर करें',
     locationCaptured: 'स्थान कैप्चर हो गया',
     uploadPhotos: 'फ़ोटो (वैकल्पिक, अधिकतम 5)',
@@ -90,6 +92,14 @@ const hi: Translations = {
     markRead: 'पठित चिह्नित करें',
     acknowledge: 'स्वीकार करें',
     resolve: 'हल करें',
+  },
+  maps: {
+    title: 'मानचित्र',
+    subtitle: 'इंटरैक्टिव GIS मानचित्र दृश्य',
+  },
+  aiAssistant: {
+    title: 'AI सहायक',
+    subtitle: 'जल आपूर्ति के बारे में प्रश्न पूछें',
   },
   settings: {
     title: 'सेटिंग्स',

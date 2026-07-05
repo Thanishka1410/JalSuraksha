@@ -22,16 +22,21 @@ interface HeaderProps {
   notificationCount?: number;
 }
 
-const pageTitles: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/infrastructure': 'Infrastructure',
-  '/quality': 'Water Quality',
-  '/complaints': 'Complaints',
-  '/analytics': 'Analytics',
-  '/maps': 'Maps',
-  '/alerts': 'Alerts',
-  '/ai-assistant': 'AI Assistant',
-  '/settings': 'Settings',
+const getPageTitleKey = (path: string): string => {
+  const map: Record<string, string> = {
+    '/dashboard': 'dashboard.title',
+    '/infrastructure': 'infrastructure.title',
+    '/quality': 'quality.title',
+    '/complaints': 'complaints.title',
+    '/analytics': 'analytics.title',
+    '/maps': 'maps.title',
+    '/alerts': 'alerts.title',
+    '/ai-assistant': 'aiAssistant.title',
+    '/settings': 'settings.title',
+  };
+  if (map[path]) return map[path];
+  const basePath = '/' + path.split('/')[1];
+  return map[basePath] || 'JalRakshak AI';
 };
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) => {
@@ -50,9 +55,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
 
   const getPageTitle = () => {
     const path = location.pathname;
-    if (pageTitles[path]) return pageTitles[path];
-    const basePath = '/' + path.split('/')[1];
-    return pageTitles[basePath] || 'JalRakshak AI';
+    const key = getPageTitleKey(path);
+    if (key === 'JalRakshak AI') return key;
+    const keys = key.split('.');
+    let val: any = t;
+    for (const k of keys) val = val?.[k];
+    return val || key;
   };
 
   useEffect(() => {

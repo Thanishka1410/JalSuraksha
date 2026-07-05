@@ -42,6 +42,8 @@ const en = {
     description: 'Description',
     priority: 'Priority',
     village: 'Village',
+    villagePlaceholder: 'Type village name...',
+    noVillagesFound: 'No villages found',
     captureLocation: 'Capture GPS Location',
     locationCaptured: 'Location Captured',
     uploadPhotos: 'Photos (Optional, max 5)',
@@ -95,6 +97,16 @@ const en = {
     markRead: 'Mark as Read',
     acknowledge: 'Acknowledge',
     resolve: 'Resolve',
+  },
+  // Maps
+  maps: {
+    title: 'Maps',
+    subtitle: 'Interactive GIS map view',
+  },
+  // AI Assistant
+  aiAssistant: {
+    title: 'AI Assistant',
+    subtitle: 'Ask questions about water supply',
   },
   // Settings
   settings: {
