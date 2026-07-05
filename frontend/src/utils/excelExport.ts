@@ -1,5 +1,5 @@
 /**
- * Excel / CSV export utility for JalRakshak AI
+ * Excel / CSV export utility for JalSuraksha AI
  * Uses SheetJS (xlsx) when available, falls back to CSV download.
  */
 
@@ -35,7 +35,7 @@ export const exportToExcel = async (
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
-    XLSX.writeFile(wb, `jalrakshak_${safeName}_${dateStr}.xlsx`);
+    XLSX.writeFile(wb, `JalSuraksha_${safeName}_${dateStr}.xlsx`);
   } catch {
     // Fallback: export as CSV
     exportToCSV(rows, `${safeName}_${dateStr}`);
@@ -64,7 +64,7 @@ export const exportToCSV = (rows: Row[], filename: string): void => {
   ].join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  downloadFile(blob, `jalrakshak_${filename}.csv`);
+  downloadFile(blob, `JalSuraksha_${filename}.csv`);
 };
 
 /* ── Helpers for specific export types ───────────────────────────── */

@@ -19,7 +19,7 @@ const I18nContext = createContext<I18nContextValue>({
   setLanguage: () => {},
 });
 
-const STORAGE_KEY = 'jalrakshak_lang';
+const STORAGE_KEY = 'JalSuraksha_lang';
 
 export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {

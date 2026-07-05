@@ -13,7 +13,7 @@ const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jalrakshak_token');
+    const token = localStorage.getItem('JalSuraksha_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,8 +28,8 @@ api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('jalrakshak_token');
-      localStorage.removeItem('jalrakshak_user');
+      localStorage.removeItem('JalSuraksha_token');
+      localStorage.removeItem('JalSuraksha_user');
       window.location.href = '/login';
       toast.error('Session expired. Please login again.');
     } else if (error.response?.status === 403) {

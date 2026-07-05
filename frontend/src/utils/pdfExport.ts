@@ -16,7 +16,7 @@ export const exportToPDF = async (
   elementId: string,
   options: PDFReportOptions
 ): Promise<void> => {
-  const { title, subtitle = 'JalRakshak AI — Rural Water Supply Monitoring', filename } = options;
+  const { title, subtitle = 'JalSuraksha AI — Rural Water Supply Monitoring', filename } = options;
 
   const element = document.getElementById(elementId);
   if (!element) {
@@ -48,7 +48,7 @@ export const exportToPDF = async (
   pdf.setTextColor(255, 255, 255);
   pdf.setFontSize(16);
   pdf.setFont('helvetica', 'bold');
-  pdf.text('💧 JalRakshak AI', marginX, 11);
+  pdf.text('💧 JalSuraksha AI', marginX, 11);
 
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
@@ -123,7 +123,7 @@ export const exportToPDF = async (
   pdf.setFontSize(7);
   pdf.setFont('helvetica', 'normal');
   pdf.text(
-    'JalRakshak AI | Jal Jeevan Mission | Government of India',
+    'JalSuraksha AI | Jal Jeevan Mission | Government of India',
     pageWidth / 2,
     pageHeight - 5,
     { align: 'center' }
@@ -131,5 +131,5 @@ export const exportToPDF = async (
 
   // Save
   const safeName = (filename || title).replace(/\s+/g, '_').toLowerCase();
-  pdf.save(`jalrakshak_${safeName}_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}.pdf`);
+  pdf.save(`JalSuraksha_${safeName}_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}.pdf`);
 };

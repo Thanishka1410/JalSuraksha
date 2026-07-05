@@ -96,7 +96,7 @@ const ForgotPasswordPage: React.FC = () => {
           >
             <Droplets className="w-8 h-8 text-white" />
           </motion.div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">JalRakshak AI</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">JalSuraksha AI</h1>
         </div>
 
         {/* Forgot Password Form */}

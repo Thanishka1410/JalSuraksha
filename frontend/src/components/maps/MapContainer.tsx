@@ -29,8 +29,8 @@ const MapContainer: React.FC<MapContainerProps> = ({
   pipelines = [],
   valves = [],
   leaks = [],
-  center = [21.2514, 81.6296],
-  zoom = 14,
+  center = [15.9129, 79.7400],
+  zoom = 7,
 }) => {
   const [layers] = useState({
     pumps: true,

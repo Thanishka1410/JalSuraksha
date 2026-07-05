@@ -28,11 +28,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('jalrakshak_token'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem('JalSuraksha_token'));
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAuth = useCallback(async () => {
-    const storedToken = localStorage.getItem('jalrakshak_token');
+    const storedToken = localStorage.getItem('JalSuraksha_token');
     if (!storedToken) {
       setIsLoading(false);
       return;
@@ -43,8 +43,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(response.data.user);
       setToken(storedToken);
     } catch (error) {
-      localStorage.removeItem('jalrakshak_token');
-      localStorage.removeItem('jalrakshak_user');
+      localStorage.removeItem('JalSuraksha_token');
+      localStorage.removeItem('JalSuraksha_user');
       setToken(null);
       setUser(null);
     } finally {
@@ -65,8 +65,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const { user: userData, token: authToken } = response.data;
       setUser(userData);
       setToken(authToken);
-      localStorage.setItem('jalrakshak_token', authToken);
-      localStorage.setItem('jalrakshak_user', JSON.stringify(userData));
+      localStorage.setItem('JalSuraksha_token', authToken);
+      localStorage.setItem('JalSuraksha_user', JSON.stringify(userData));
       toast.success('Login successful!');
     } catch (error: any) {
       const message = error.response?.data?.message || 'Login failed';
@@ -89,8 +89,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('jalrakshak_token');
-    localStorage.removeItem('jalrakshak_user');
+    localStorage.removeItem('JalSuraksha_token');
+    localStorage.removeItem('JalSuraksha_user');
     toast.success('Logged out successfully');
   };
 
@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await apiPut<ApiResponse<User>>('/auth/profile', data);
       setUser(response.data);
-      localStorage.setItem('jalrakshak_user', JSON.stringify(response.data));
+      localStorage.setItem('JalSuraksha_user', JSON.stringify(response.data));
       toast.success('Profile updated successfully');
     } catch (error: any) {
       const message = error.response?.data?.message || 'Update failed';

@@ -36,7 +36,7 @@ const getPageTitleKey = (path: string): string => {
   };
   if (map[path]) return map[path];
   const basePath = '/' + path.split('/')[1];
-  return map[basePath] || 'JalRakshak AI';
+  return map[basePath] || 'JalSuraksha AI';
 };
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) => {
@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
   const getPageTitle = () => {
     const path = location.pathname;
     const key = getPageTitleKey(path);
-    if (key === 'JalRakshak AI') return key;
+    if (key === 'JalSuraksha AI') return key;
     const keys = key.split('.');
     let val: any = t;
     for (const k of keys) val = val?.[k];

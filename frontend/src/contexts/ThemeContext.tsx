@@ -12,7 +12,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const saved = localStorage.getItem('jalrakshak_theme');
+    const saved = localStorage.getItem('JalSuraksha_theme');
     if (saved === 'dark' || saved === 'light') {
       return saved;
     }
@@ -26,7 +26,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('jalrakshak_theme', theme);
+    localStorage.setItem('JalSuraksha_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
