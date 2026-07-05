@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { apiGet } from '../../utils/api';
 import { useI18n } from '../../contexts/I18nContext';
 
+// Must match backend constants: COMPLAINT_CATEGORIES & PRIORITY_LEVELS
 const complaintSchema = z.object({
   category: z.enum(['leakage', 'no_water', 'dirty_water', 'low_pressure', 'other']),
   description: z.string().min(10, 'Description must be at least 10 characters'),
@@ -32,12 +33,20 @@ const prioritySuggestions: Record<string, string> = {
   other: 'low',
 };
 
+const categoryLabels: Record<string, string> = {
+  leakage: 'Pipe Leakage',
+  no_water: 'No Water Supply',
+  dirty_water: 'Dirty / Contaminated Water',
+  low_pressure: 'Low Water Pressure',
+  other: 'Other',
+};
+
 const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit, loading }) => {
   const { t } = useI18n();
   const [images, setImages] = useState<File[]>([]);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isCapturingLocation, setIsCapturingLocation] = useState(false);
-  const [villages, setVillages] = useState<{ _id: string; name: string }[]>([]);
+  const [villages, setVillages] = useState<{ _id: string; name: string; code: string }[]>([]);
   const [villageSearch, setVillageSearch] = useState('');
   const [showVillageDropdown, setShowVillageDropdown] = useState(false);
   const villageRef = useRef<HTMLDivElement>(null);
@@ -61,7 +70,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
 
   useEffect(() => {
     if (isOpen) {
-      apiGet<{ data: { villages: { _id: string; name: string }[] } }>('/villages')
+      apiGet<{ data: { villages: { _id: string; name: string; code: string }[] } }>('/villages')
         .then((res) => setVillages(res.data.villages))
         .catch(() => {});
     }
@@ -81,8 +90,8 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
     v.name.toLowerCase().includes(villageSearch.toLowerCase())
   );
 
-  const selectVillage = (v: { _id: string; name: string }) => {
-    setVillageSearch(v.name);
+  const selectVillage = (v: { _id: string; name: string; code: string }) => {
+    setVillageSearch(`${v.name} (${v.code})`);
     setValue('village', v._id);
     setShowVillageDropdown(false);
   };
@@ -137,11 +146,9 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
             {...register('category')}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
-            <option value="leakage">Leakage</option>
-            <option value="no_water">No Water</option>
-            <option value="dirty_water">Dirty Water</option>
-            <option value="low_pressure">Low Pressure</option>
-            <option value="other">Other</option>
+            {Object.entries(categoryLabels).map(([val, label]) => (
+              <option key={val} value={val}>{label}</option>
+            ))}
           </select>
         </div>
 
@@ -207,7 +214,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
                         onClick={() => selectVillage(v)}
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
                       >
-                        {v.name}
+                        {v.name} ({v.code})
                       </button>
                     ))
                   ) : (
@@ -231,7 +238,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
             className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             <MapPin className="w-4 h-4" />
-            {location ? t.complaints.locationCaptured : t.complaints.captureLocation}
+            {isCapturingLocation ? 'Capturing...' : location ? t.complaints.locationCaptured : t.complaints.captureLocation}
           </button>
           {location && (
             <p className="text-sm text-gray-500 mt-2">

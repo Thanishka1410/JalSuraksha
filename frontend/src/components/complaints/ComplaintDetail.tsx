@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { format } from 'date-fns';
-import { X, Clock, User, MapPin, MessageSquare } from 'lucide-react';
+import { X, Clock, User, MapPin } from 'lucide-react';
 import { Complaint } from '../../types';
 import StatusBadge from '../common/StatusBadge';
 import { getPriorityColor, timeAgo } from '../../utils/helpers';

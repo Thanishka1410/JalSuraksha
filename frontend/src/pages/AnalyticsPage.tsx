@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Download, BarChart3, Droplets, Wrench, Loader2, TrendingUp,
-  AlertCircle, Activity, Shield, FileSpreadsheet,
+  Shield, FileSpreadsheet,
 } from 'lucide-react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,

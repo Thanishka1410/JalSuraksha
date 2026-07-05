@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, ClipboardList } from 'lucide-react';
 import { Complaint } from '../../types';
-import { timeAgo, getStatusColor } from '../../utils/helpers';
+import { timeAgo } from '../../utils/helpers';
 import StatusBadge from '../common/StatusBadge';
 
 interface RecentComplaintsProps {

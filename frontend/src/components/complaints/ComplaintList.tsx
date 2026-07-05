@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardList, User, MapPin, Clock } from 'lucide-react';
+import { ClipboardList, User, Clock } from 'lucide-react';
 import { Complaint } from '../../types';
 import StatusBadge from '../common/StatusBadge';
 import { timeAgo, getPriorityColor } from '../../utils/helpers';

@@ -141,11 +141,11 @@ const LeakDetectionPanel: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-4 rounded-xl border-2 ${
+          className={`mt-6 p-4 rounded-xl border-2 ${
             result.leakDetected
               ? 'border-danger-500 bg-danger-50 dark:bg-danger-900/20'
               : 'border-success-500 bg-success-50 dark:bg-success-900/20'
-          }"
+          }`}
         >
           <div className="flex items-center gap-3 mb-3">
             {result.leakDetected ? (
