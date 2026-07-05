@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AlertTriangle, Droplets, Wrench, Gauge, Shield, ChevronRight } from 'lucide-react';
 import { Alert } from '../../types';
 import { timeAgo, getSeverityColor } from '../../utils/helpers';
+import { useI18n } from '../../contexts/I18nContext';
 
 interface RecentAlertsProps {
   alerts: Alert[];
@@ -25,6 +26,8 @@ const getAlertIcon = (type: string) => {
 };
 
 const RecentAlerts: React.FC<RecentAlertsProps> = ({ alerts, isLoading }) => {
+  const { t } = useI18n();
+
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
@@ -47,14 +50,14 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ alerts, isLoading }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Alerts</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.dashboard.recentAlerts}</h3>
         <button className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1">
-          View all <ChevronRight className="w-4 h-4" />
+          {t.common.view} <ChevronRight className="w-4 h-4" />
         </button>
       </div>
       <div className="space-y-4">
         {alerts.length === 0 ? (
-          <p className="text-center text-gray-500 dark:text-gray-400 py-4">No recent alerts</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t.common.noData}</p>
         ) : (
           alerts.slice(0, 5).map((alert, index) => {
             const Icon = getAlertIcon(alert.type);

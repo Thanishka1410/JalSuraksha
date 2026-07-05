@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
+import { useI18n } from '../../contexts/I18nContext';
 
 interface ComplaintsByCategoryChartProps {
   data: { name: string; count: number }[];
@@ -33,6 +34,8 @@ const ComplaintsByCategoryChart: React.FC<ComplaintsByCategoryChartProps> = ({
   data,
   isLoading,
 }) => {
+  const { t } = useI18n();
+
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
@@ -45,7 +48,7 @@ const ComplaintsByCategoryChart: React.FC<ComplaintsByCategoryChartProps> = ({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-        Complaints by Category
+        {t.analytics.complaintsByCategory}
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>

@@ -3,8 +3,10 @@ import MapContainer from '../components/maps/MapContainer';
 import { useFetch } from '../hooks/useApi';
 import { Pump, WaterTank, Complaint, Pipeline, Valve } from '../types';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { useI18n } from '../contexts/I18nContext';
 
 const MapsPage: React.FC = () => {
+  const { t } = useI18n();
   const { data: pumpsData, loading: pumpsLoading } = useFetch<{ data: { pumps: Pump[] } }>('/pumps');
   const { data: tanksData, loading: tanksLoading } = useFetch<{ data: { tanks: WaterTank[] } }>('/tanks');
   const { data: complaintsData, loading: complaintsLoading } = useFetch<{ data: { complaints: Complaint[] } }>('/complaints');
@@ -36,7 +38,7 @@ const MapsPage: React.FC = () => {
   if (pumpsLoading || tanksLoading || complaintsLoading || pipelinesLoading || valvesLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <LoadingSpinner text="Loading map data..." />
+        <LoadingSpinner text={t.maps.loadingMap} />
       </div>
     );
   }
@@ -44,21 +46,21 @@ const MapsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">GIS Map</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.maps.gisMap}</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Visualize water infrastructure, pipelines, valves, leaks and complaints on the village map
+          {t.maps.mapDescription}
         </p>
       </div>
 
       {/* Stats bar */}
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
         {[
-          { label: 'Pumps', count: pumps.length, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
-          { label: 'Tanks', count: tanks.length, color: 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300' },
-          { label: 'Pipelines', count: pipelines.length, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
-          { label: 'Valves', count: valves.length, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
-          { label: 'Leaks', count: leaks.length, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
-          { label: 'Complaints', count: complaints.filter(c => c.location?.coordinates).length, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' },
+          { label: t.maps.pumps, count: pumps.length, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
+          { label: t.maps.tanks, count: tanks.length, color: 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300' },
+          { label: t.maps.pipelines, count: pipelines.length, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
+          { label: t.maps.valves, count: valves.length, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
+          { label: t.maps.leaks, count: leaks.length, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
+          { label: t.maps.complaints, count: complaints.filter(c => c.location?.coordinates).length, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' },
         ].map(({ label, count, color }) => (
           <div key={label} className={`rounded-xl px-4 py-3 ${color} text-center`}>
             <p className="text-2xl font-bold">{count}</p>

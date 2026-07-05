@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { User, Lock, Bell, Palette, Loader2, Save } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useI18n } from '../contexts/I18nContext';
 import toast from 'react-hot-toast';
 
 const profileSchema = z.object({
@@ -29,6 +30,7 @@ type PasswordFormData = z.infer<typeof passwordSchema>;
 const SettingsPage: React.FC = () => {
   const { user, updateProfile, changePassword } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'notifications' | 'appearance'>('profile');
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
@@ -79,18 +81,18 @@ const SettingsPage: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'profile' as const, label: 'Profile', icon: User },
-    { id: 'password' as const, label: 'Password', icon: Lock },
-    { id: 'notifications' as const, label: 'Notifications', icon: Bell },
-    { id: 'appearance' as const, label: 'Appearance', icon: Palette },
+    { id: 'profile' as const, label: t.settings.profileTab, icon: User },
+    { id: 'password' as const, label: t.settings.passwordTab, icon: Lock },
+    { id: 'notifications' as const, label: t.settings.notificationsTab, icon: Bell },
+    { id: 'appearance' as const, label: t.settings.appearanceTab, icon: Palette },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.settings.title}</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Manage your account settings and preferences
+          {t.settings.managePrefs}
         </p>
       </div>
 
@@ -129,11 +131,11 @@ const SettingsPage: React.FC = () => {
             {activeTab === 'profile' && (
               <form onSubmit={handleSubmitProfile(onProfileSubmit)} className="space-y-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Profile Information
+                  {t.settings.profileInformation}
                 </h2>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Full Name
+                    {t.settings.fullName}
                   </label>
                   <input
                     {...registerProfile('name')}
@@ -146,7 +148,7 @@ const SettingsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Email
+                    {t.settings.email}
                   </label>
                   <input
                     {...registerProfile('email')}
@@ -159,7 +161,7 @@ const SettingsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Phone
+                    {t.settings.phone}
                   </label>
                   <input
                     {...registerProfile('phone')}
@@ -180,7 +182,7 @@ const SettingsPage: React.FC = () => {
                   ) : (
                     <Save className="w-4 h-4" />
                   )}
-                  Save Changes
+                  {t.settings.save}
                 </button>
               </form>
             )}
@@ -188,11 +190,11 @@ const SettingsPage: React.FC = () => {
             {activeTab === 'password' && (
               <form onSubmit={handleSubmitPassword(onPasswordSubmit)} className="space-y-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Change Password
+                  {t.settings.changePassword}
                 </h2>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Current Password
+                    {t.settings.currentPassword}
                   </label>
                   <input
                     {...registerPassword('currentPassword')}
@@ -207,7 +209,7 @@ const SettingsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    New Password
+                    {t.settings.newPassword}
                   </label>
                   <input
                     {...registerPassword('newPassword')}
@@ -222,7 +224,7 @@ const SettingsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Confirm New Password
+                    {t.settings.confirmPassword}
                   </label>
                   <input
                     {...registerPassword('confirmPassword')}
@@ -245,7 +247,7 @@ const SettingsPage: React.FC = () => {
                   ) : (
                     <Lock className="w-4 h-4" />
                   )}
-                  Update Password
+                  {t.settings.updatePassword}
                 </button>
               </form>
             )}
@@ -253,13 +255,13 @@ const SettingsPage: React.FC = () => {
             {activeTab === 'notifications' && (
               <div className="space-y-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Notification Preferences
+                  {t.settings.notificationPreferences}
                 </h2>
                 {[
-                  { label: 'Email notifications', description: 'Receive email for important alerts' },
-                  { label: 'SMS alerts', description: 'Get SMS for critical issues' },
-                  { label: 'Push notifications', description: 'Browser push notifications' },
-                  { label: 'Weekly reports', description: 'Receive weekly summary reports' },
+                  { label: t.settings.emailNotifications, description: t.settings.emailNotificationsDesc },
+                  { label: t.settings.smsAlerts, description: t.settings.smsAlertsDesc },
+                  { label: t.settings.pushNotifications, description: t.settings.pushNotificationsDesc },
+                  { label: t.settings.weeklyReports, description: t.settings.weeklyReportsDesc },
                 ].map((item, index) => (
                   <div
                     key={index}
@@ -281,14 +283,14 @@ const SettingsPage: React.FC = () => {
             {activeTab === 'appearance' && (
               <div className="space-y-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Appearance
+                  {t.settings.appearance}
                 </h2>
                 <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Dark Mode</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{t.settings.darkMode}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Toggle between light and dark theme
+                        {t.settings.darkModeDesc}
                       </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">

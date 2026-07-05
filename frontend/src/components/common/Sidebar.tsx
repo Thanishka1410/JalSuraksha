@@ -18,6 +18,7 @@ import {
   CalendarClock,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useI18n } from '../../contexts/I18nContext';
 import { getInitials } from '../../utils/helpers';
 
 
@@ -28,19 +29,6 @@ interface SidebarProps {
   onMobileClose: () => void;
 }
 
-const allNavItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
-  { path: '/infrastructure', label: 'Infrastructure', icon: Wrench, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'district_officer'] },
-  { path: '/quality', label: 'Water Quality', icon: Droplets, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
-  { path: '/complaints', label: 'Complaints', icon: ClipboardList, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
-  { path: '/schedule', label: 'Schedule', icon: CalendarClock, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
-  { path: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['super_admin', 'district_officer'] },
-  { path: '/maps', label: 'Maps', icon: Map, roles: ['super_admin', 'gp_admin', 'district_officer'] },
-  { path: '/alerts', label: 'Alerts', icon: Bell, roles: ['super_admin', 'gp_admin', 'district_officer'] },
-  { path: '/ai-assistant', label: 'AI Assistant', icon: Bot, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'district_officer'] },
-  { path: '/settings', label: 'Settings', icon: Settings, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
-];
-
 const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   onToggle,
@@ -48,7 +36,21 @@ const Sidebar: React.FC<SidebarProps> = ({
   onMobileClose,
 }) => {
   const { user, logout } = useAuth();
+  const { t } = useI18n();
   const location = useLocation();
+
+  const allNavItems = [
+    { path: '/dashboard', label: t.nav.dashboard, icon: LayoutDashboard, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+    { path: '/infrastructure', label: t.nav.infrastructure, icon: Wrench, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'district_officer'] },
+    { path: '/quality', label: t.nav.quality, icon: Droplets, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+    { path: '/complaints', label: t.nav.complaints, icon: ClipboardList, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+    { path: '/schedule', label: t.nav.schedule, icon: CalendarClock, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+    { path: '/analytics', label: t.nav.analytics, icon: BarChart3, roles: ['super_admin', 'district_officer'] },
+    { path: '/maps', label: t.nav.maps, icon: Map, roles: ['super_admin', 'gp_admin', 'district_officer'] },
+    { path: '/alerts', label: t.nav.alerts, icon: Bell, roles: ['super_admin', 'gp_admin', 'district_officer'] },
+    { path: '/ai-assistant', label: t.nav.aiAssistant, icon: Bot, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'district_officer'] },
+    { path: '/settings', label: t.nav.settings, icon: Settings, roles: ['super_admin', 'gp_admin', 'vWSC_member', 'citizen', 'district_officer'] },
+  ];
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">

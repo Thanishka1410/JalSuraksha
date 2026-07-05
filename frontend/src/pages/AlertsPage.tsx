@@ -7,8 +7,10 @@ import { useFetch } from '../hooks/useApi';
 import { apiPut } from '../utils/api';
 import { Alert } from '../types';
 import toast from 'react-hot-toast';
+import { useI18n } from '../contexts/I18nContext';
 
 const AlertsPage: React.FC = () => {
+  const { t } = useI18n();
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
 
@@ -29,7 +31,7 @@ const AlertsPage: React.FC = () => {
   const handleAcknowledge = async (alert: Alert) => {
     try {
       await apiPut(`/alerts/${alert._id}/acknowledge`);
-      toast.success('Alert acknowledged');
+      toast.success(t.alerts.acknowledge);
       refetch();
     } catch (error) {
       toast.error('Failed to acknowledge alert');
@@ -49,18 +51,18 @@ const AlertsPage: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Alerts</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.alerts.title}</h1>
         <p className="text-gray-500 dark:text-gray-400">
-          Monitor system alerts and notifications
+          {t.alerts.subtitle}
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Total Alerts" value={alerts.length} icon={Bell} color="primary" />
-        <KPICard title="Critical" value={criticalCount} icon={AlertTriangle} color="danger" />
-        <KPICard title="High Priority" value={highCount} icon={AlertTriangle} color="accent" />
-        <KPICard title="Unread" value={unreadCount} icon={Bell} color="secondary" />
+        <KPICard title={t.alerts.totalAlerts} value={alerts.length} icon={Bell} color="primary" />
+        <KPICard title={t.alerts.critical} value={criticalCount} icon={AlertTriangle} color="danger" />
+        <KPICard title={t.alerts.highPriority} value={highCount} icon={AlertTriangle} color="accent" />
+        <KPICard title={t.alerts.unread} value={unreadCount} icon={Bell} color="secondary" />
       </div>
 
       {/* Filters */}
@@ -70,23 +72,23 @@ const AlertsPage: React.FC = () => {
           onChange={(e) => setSeverityFilter(e.target.value)}
           className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
         >
-          <option value="all">All Severity</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-          <option value="critical">Critical</option>
+          <option value="all">{t.alerts.allSeverity}</option>
+          <option value="low">{t.alerts.low}</option>
+          <option value="medium">{t.alerts.medium}</option>
+          <option value="high">{t.alerts.high}</option>
+          <option value="critical">{t.alerts.critical}</option>
         </select>
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
           className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
         >
-          <option value="all">All Types</option>
-          <option value="leak">Leak</option>
-          <option value="pump">Pump</option>
-          <option value="quality">Quality</option>
-          <option value="tank">Tank</option>
-          <option value="complaint">Complaint</option>
+          <option value="all">{t.alerts.allTypes}</option>
+          <option value="leak">{t.alerts.leak}</option>
+          <option value="pump">{t.alerts.pump}</option>
+          <option value="quality">{t.alerts.quality}</option>
+          <option value="tank">{t.alerts.tank}</option>
+          <option value="complaint">{t.alerts.complaint}</option>
         </select>
       </div>
 

@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
                   <Search className="absolute left-3 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder={t.common.search}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onBlur={() => !searchQuery && setIsSearchOpen(false)}
@@ -141,7 +141,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={t.settings.theme}
           >
             {theme === 'dark' ? (
               <Sun className="w-5 h-5 text-gray-600 dark:text-gray-300" />
@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
             <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
               className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
-              title="Change language"
+              title={t.settings.language}
               id="language-switcher-btn"
             >
               <span className="text-base">
@@ -218,7 +218,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
                   className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
                 >
                   <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{t.settings.notifications}</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
                     {mockNotifications.map((notification) => (
@@ -237,7 +237,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
                   </div>
                   <div className="px-4 py-3 text-center">
                     <button className="text-sm text-primary-500 hover:text-primary-600 font-medium">
-                      View all notifications
+                      {t.alerts.title}
                     </button>
                   </div>
                 </motion.div>
@@ -281,7 +281,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                     >
                       <User className="w-4 h-4" />
-                      Profile
+                      {t.settings.profile}
                     </button>
                     <button
                       onClick={() => {
@@ -291,7 +291,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, notificationCount = 0 }) =
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
                     >
                       <Settings className="w-4 h-4" />
-                      Settings
+                      {t.settings.title}
                     </button>
                     <button
                       onClick={() => {

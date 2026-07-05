@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { motion } from 'framer-motion';
 import { Droplets, Mail, ArrowLeft, Loader2, CheckCircle } from 'lucide-react';
 import { apiPost } from '../utils/api';
+import { useI18n } from '../contexts/I18nContext';
 import toast from 'react-hot-toast';
 
 const forgotPasswordSchema = z.object({
@@ -17,6 +18,7 @@ type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 const ForgotPasswordPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
+  const { t } = useI18n();
 
   const {
     register,
@@ -58,18 +60,17 @@ const ForgotPasswordPage: React.FC = () => {
               <CheckCircle className="w-8 h-8 text-success-500" />
             </motion.div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Check Your Email
+              {t.auth.checkEmail}
             </h2>
             <p className="text-gray-500 dark:text-gray-400 mb-6">
-              We've sent a password reset link to your email address. Please check your inbox and
-              follow the instructions.
+              {t.auth.checkEmailDesc}
             </p>
             <Link
               to="/login"
               className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Login
+              {t.auth.backToLogin}
             </Link>
           </div>
         </motion.div>
@@ -101,17 +102,17 @@ const ForgotPasswordPage: React.FC = () => {
         {/* Forgot Password Form */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Forgot Password?
+            {t.auth.forgotPasswordTitle}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 mb-6">
-            Enter your email address and we'll send you a link to reset your password.
+            {t.auth.forgotPasswordDesc}
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Email Address
+                {t.auth.emailAddress}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -140,19 +141,19 @@ const ForgotPasswordPage: React.FC = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Sending...
+                  {t.auth.sending}
                 </>
               ) : (
-                'Send Reset Link'
+                t.auth.sendResetLink
               )}
             </button>
           </form>
 
           {/* Back to Login */}
           <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            Remember your password?{' '}
+            {t.auth.rememberPassword}{' '}
             <Link to="/login" className="text-primary-500 hover:text-primary-600 font-medium">
-              Sign in
+              {t.auth.signInLink}
             </Link>
           </p>
         </div>

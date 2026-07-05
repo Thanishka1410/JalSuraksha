@@ -42,7 +42,7 @@ const ComplaintsPage: React.FC = () => {
       // Step 1: Upload images if any
       let imageUrls: string[] = [];
       if (formData.images && formData.images.length > 0) {
-        toast.loading('Uploading images...', { id: 'upload-toast' });
+        toast.loading(t.complaints.uploadingImages, { id: 'upload-toast' });
         imageUrls = await uploadImages(formData.images);
         toast.dismiss('upload-toast');
       }
@@ -54,11 +54,11 @@ const ComplaintsPage: React.FC = () => {
         payload.location = { type: 'Point', coordinates: [location.lng, location.lat] };
       }
       await apiPost('/complaints', payload);
-      toast.success('Complaint submitted successfully');
+      toast.success(t.complaints.complaintSubmitted);
       refetch();
     } catch (error) {
       toast.dismiss('upload-toast');
-      toast.error('Failed to submit complaint');
+      toast.error(t.complaints.complaintFailed);
     } finally {
       setSubmitLoading(false);
     }
@@ -97,35 +97,35 @@ const ComplaintsPage: React.FC = () => {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
           >
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="assigned">Assigned</option>
-            <option value="in_progress">In Progress</option>
-            <option value="resolved">Resolved</option>
-            <option value="closed">Closed</option>
+            <option value="all">{t.complaints.allStatus}</option>
+            <option value="pending">{t.complaints.pending}</option>
+            <option value="assigned">{t.complaints.assigned}</option>
+            <option value="in_progress">{t.complaints.inProgress}</option>
+            <option value="resolved">{t.complaints.resolved}</option>
+            <option value="closed">{t.complaints.closed}</option>
           </select>
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
           >
-            <option value="all">All Categories</option>
-            <option value="water_quality">Water Quality</option>
-            <option value="supply">Supply</option>
-            <option value="infrastructure">Infrastructure</option>
+            <option value="all">{t.complaints.allCategories}</option>
+            <option value="water_quality">{t.quality.title}</option>
+            <option value="supply">{t.complaints.noWater}</option>
+            <option value="infrastructure">{t.infrastructure.title}</option>
             <option value="billing">Billing</option>
-            <option value="other">Other</option>
+            <option value="other">{t.complaints.other}</option>
           </select>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
           >
-            <option value="all">All Priorities</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="critical">Critical</option>
+            <option value="all">{t.complaints.allPriorities}</option>
+            <option value="low">{t.complaints.low}</option>
+            <option value="medium">{t.complaints.medium}</option>
+            <option value="high">{t.complaints.high}</option>
+            <option value="critical">{t.complaints.critical}</option>
           </select>
         </div>
         <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">

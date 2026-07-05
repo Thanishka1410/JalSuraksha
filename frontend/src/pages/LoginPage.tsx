@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { motion } from 'framer-motion';
 import { Droplets, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useI18n } from '../contexts/I18nContext';
 import toast from 'react-hot-toast';
 
 const loginSchema = z.object({
@@ -18,6 +19,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,18 +62,18 @@ const LoginPage: React.FC = () => {
             <Droplets className="w-8 h-8 text-white" />
           </motion.div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">JalRakshak AI</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Rural Water Supply Monitoring</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{t.auth.ruralWaterSupply}</p>
         </div>
 
         {/* Login Form */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Sign In</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">{t.auth.signIn}</h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Email Address
+                {t.auth.emailAddress}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -94,7 +96,7 @@ const LoginPage: React.FC = () => {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Password
+                {t.auth.password}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -128,13 +130,13 @@ const LoginPage: React.FC = () => {
                   type="checkbox"
                   className="w-4 h-4 rounded border-gray-300 text-primary-500 focus:ring-primary-500"
                 />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t.auth.rememberMe}</span>
               </label>
               <Link
                 to="/forgot-password"
                 className="text-sm text-primary-500 hover:text-primary-600 font-medium"
               >
-                Forgot password?
+                {t.auth.forgotPassword}
               </Link>
             </div>
 
@@ -147,19 +149,19 @@ const LoginPage: React.FC = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Signing in...
+                  {t.auth.signingIn}
                 </>
               ) : (
-                'Sign In'
+                t.auth.signIn
               )}
             </button>
           </form>
 
           {/* Register Link */}
           <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            Don't have an account?{' '}
+            {t.auth.dontHaveAccount}{' '}
             <Link to="/register" className="text-primary-500 hover:text-primary-600 font-medium">
-              Sign up
+              {t.auth.signUpLink}
             </Link>
           </p>
         </div>

@@ -11,10 +11,12 @@ import { useFetch } from '../hooks/useApi';
 import { apiGet, apiPost, apiPut } from '../utils/api';
 import { Pump, WaterTank, Valve, Pipeline } from '../types';
 import toast from 'react-hot-toast';
+import { useI18n } from '../contexts/I18nContext';
 
 type TabType = 'pumps' | 'tanks' | 'valves' | 'pipelines';
 
 const InfrastructurePage: React.FC = () => {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<TabType>('pumps');
   const [searchQuery, setSearchQuery] = useState('');
   const [isPumpFormOpen, setIsPumpFormOpen] = useState(false);
@@ -46,10 +48,10 @@ const InfrastructurePage: React.FC = () => {
     try {
       if (selectedPump) {
         await apiPut(`/pumps/${selectedPump._id}`, data);
-        toast.success('Pump updated successfully');
+        toast.success(t.infrastructure.pumps + ' updated successfully');
       } else {
         await apiPost('/pumps', data);
-        toast.success('Pump created successfully');
+        toast.success(t.infrastructure.pumps + ' created successfully');
       }
       refetchPumps();
       setSelectedPump(null);
@@ -62,10 +64,10 @@ const InfrastructurePage: React.FC = () => {
     try {
       if (selectedTank) {
         await apiPut(`/tanks/${selectedTank._id}`, data);
-        toast.success('Tank updated successfully');
+        toast.success(t.infrastructure.tanks + ' updated successfully');
       } else {
         await apiPost('/tanks', data);
-        toast.success('Tank created successfully');
+        toast.success(t.infrastructure.tanks + ' created successfully');
       }
       refetchTanks();
       setSelectedTank(null);
@@ -89,10 +91,10 @@ const InfrastructurePage: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'pumps' as TabType, label: 'Pumps', icon: Zap, count: pumps.length },
-    { id: 'tanks' as TabType, label: 'Tanks', icon: Droplets, count: tanks.length },
-    { id: 'valves' as TabType, label: 'Valves', icon: Gauge, count: valves.length },
-    { id: 'pipelines' as TabType, label: 'Pipelines', icon: GitBranch, count: pipelines.length },
+    { id: 'pumps' as TabType, label: t.infrastructure.pumps, icon: Zap, count: pumps.length },
+    { id: 'tanks' as TabType, label: t.infrastructure.tanks, icon: Droplets, count: tanks.length },
+    { id: 'valves' as TabType, label: t.infrastructure.valves, icon: Gauge, count: valves.length },
+    { id: 'pipelines' as TabType, label: t.infrastructure.pipelines, icon: GitBranch, count: pipelines.length },
   ];
 
   return (
@@ -100,8 +102,8 @@ const InfrastructurePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Infrastructure</h1>
-          <p className="text-gray-500 dark:text-gray-400">Manage pumps, tanks, valves, and pipelines</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.infrastructure.title}</h1>
+          <p className="text-gray-500 dark:text-gray-400">{t.infrastructure.subtitle}</p>
         </div>
         <button
           onClick={() => {

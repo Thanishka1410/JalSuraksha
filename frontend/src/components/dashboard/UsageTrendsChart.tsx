@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
+import { useI18n } from '../../contexts/I18nContext';
 
 interface UsageTrendsChartProps {
   data: { date: string; usage: number; previous?: number }[];
@@ -32,6 +33,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const UsageTrendsChart: React.FC<UsageTrendsChartProps> = ({ data, isLoading }) => {
+  const { t } = useI18n();
+
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
@@ -44,7 +47,7 @@ const UsageTrendsChart: React.FC<UsageTrendsChartProps> = ({ data, isLoading }) 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-        Water Usage Trends
+        {t.dashboard.usageTrends}
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>

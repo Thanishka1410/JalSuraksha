@@ -4,6 +4,7 @@ import { ChevronRight, ClipboardList } from 'lucide-react';
 import { Complaint } from '../../types';
 import { timeAgo } from '../../utils/helpers';
 import StatusBadge from '../common/StatusBadge';
+import { useI18n } from '../../contexts/I18nContext';
 
 interface RecentComplaintsProps {
   complaints: Complaint[];
@@ -11,6 +12,8 @@ interface RecentComplaintsProps {
 }
 
 const RecentComplaints: React.FC<RecentComplaintsProps> = ({ complaints, isLoading }) => {
+  const { t } = useI18n();
+
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
@@ -33,14 +36,14 @@ const RecentComplaints: React.FC<RecentComplaintsProps> = ({ complaints, isLoadi
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Complaints</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.dashboard.recentComplaints}</h3>
         <button className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1">
-          View all <ChevronRight className="w-4 h-4" />
+          {t.common.view} <ChevronRight className="w-4 h-4" />
         </button>
       </div>
       <div className="space-y-4">
         {complaints.length === 0 ? (
-          <p className="text-center text-gray-500 dark:text-gray-400 py-4">No recent complaints</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 py-4">{t.common.noData}</p>
         ) : (
           complaints.slice(0, 5).map((complaint, index) => (
             <motion.div

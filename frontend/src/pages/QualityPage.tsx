@@ -9,8 +9,10 @@ import { useFetch } from '../hooks/useApi';
 import { apiPost } from '../utils/api';
 import { WaterQuality } from '../types';
 import toast from 'react-hot-toast';
+import { useI18n } from '../contexts/I18nContext';
 
 const QualityPage: React.FC = () => {
+  const { t } = useI18n();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const { data, loading, refetch } = useFetch<{ data: { records: WaterQuality[] } }>('/water-quality');
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -39,10 +41,10 @@ const QualityPage: React.FC = () => {
     setSubmitLoading(true);
     try {
       await apiPost('/water-quality', data);
-      toast.success('Water quality reading submitted successfully');
+      toast.success(t.quality.readingSubmitted);
       refetch();
     } catch (error) {
-      toast.error('Failed to submit reading');
+      toast.error(t.quality.readingFailed);
     } finally {
       setSubmitLoading(false);
     }
@@ -53,9 +55,9 @@ const QualityPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Water Quality</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.quality.title}</h1>
           <p className="text-gray-500 dark:text-gray-400">
-            Monitor and manage water quality parameters
+            {t.quality.subtitle}
           </p>
         </div>
         <button
@@ -63,33 +65,33 @@ const QualityPage: React.FC = () => {
           className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors"
         >
           <Plus className="w-5 h-5" />
-          Add Reading
+          {t.quality.addReading}
         </button>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
-          title="Latest Status"
+          title={t.quality.latestStatus}
           value={latestReading?.overallStatus === 'safe' ? 95 : latestReading?.overallStatus === 'needs_inspection' ? 70 : 40}
           icon={Droplets}
           color={latestReading?.overallStatus === 'safe' ? 'success' : latestReading?.overallStatus === 'needs_inspection' ? 'accent' : 'danger'}
           suffix="%"
         />
         <KPICard
-          title="Safe Readings"
+          title={t.quality.safeReadings}
           value={safeCount}
           icon={CheckCircle}
           color="success"
         />
         <KPICard
-          title="Caution Readings"
+          title={t.quality.cautionReadings}
           value={cautionCount}
           icon={AlertTriangle}
           color="accent"
         />
         <KPICard
-          title="Unsafe Readings"
+          title={t.quality.unsafeReadings}
           value={unsafeCount}
           icon={XCircle}
           color="danger"
@@ -104,7 +106,7 @@ const QualityPage: React.FC = () => {
           className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6"
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Latest Reading
+            {t.quality.latestReading}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
             {latestReading.parameters && Object.entries(latestReading.parameters).map(([key, value]) => (
