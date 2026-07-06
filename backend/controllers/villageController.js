@@ -6,17 +6,18 @@ const WaterQuality = require('../models/WaterQuality');
 
 const createVillage = async (req, res) => {
   try {
-    const village = await Village.create(req.body);
+    const { name, code, district, state, population, totalHouseholds } = req.body;
+    const village = await Village.create({ name, code, district, state, population, totalHouseholds });
     res.status(201).json({
       success: true,
       message: 'Village created successfully',
       data: { village }
     });
   } catch (error) {
-    res.status(500).json({
+    console.error('Village create error:', error.message);
+    res.status(400).json({
       success: false,
-      message: 'Error creating village',
-      error: error.message
+      message: error.message || 'Error creating village'
     });
   }
 };
