@@ -114,7 +114,7 @@ app.use('/api/v1/schedule', require('./routes/schedule'));
 app.get('/api/v1/health', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'JalRakshak API is running',
+    message: 'JalSuraksha API is running',
     timestamp: new Date().toISOString()
   });
 });
@@ -125,6 +125,14 @@ app.use((req, res) => {
     message: `Route ${req.originalUrl} not found`
   });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+}
 
 app.use(errorHandler);
 

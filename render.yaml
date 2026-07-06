@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: jalurakshak-api
+    runtime: node
+    plan: free
+    buildCommand: cd frontend && npm install && REACT_APP_API_URL=/api/v1 npm run build && cp -r build ../backend/public && cd ../backend && npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: JWT_REFRESH_EXPIRE
+        value: 30d
+      - key: FRONTEND_URL
+        value: https://jalurakshak-api.onrender.com
+      - key: AI_SERVICE_URL
+        value: ""
