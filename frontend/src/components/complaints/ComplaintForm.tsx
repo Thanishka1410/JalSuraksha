@@ -56,6 +56,7 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
     defaultValues: {
       category: 'leakage',
       priority: 'medium',
+      village: '',
     },
   });
 

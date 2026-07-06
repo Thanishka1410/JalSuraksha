@@ -32,7 +32,7 @@ const PumpForm: React.FC<PumpFormProps> = ({ isOpen, onClose, onSubmit, pump, lo
     formState: { errors },
   } = useForm<PumpFormData>({
     resolver: zodResolver(pumpSchema),
-    defaultValues: { type: 'submersible' },
+    defaultValues: { type: 'submersible', village: '' },
   });
 
   useEffect(() => {
