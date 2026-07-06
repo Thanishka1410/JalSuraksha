@@ -7,7 +7,7 @@ router.get('/', authenticate, getVillages);
 router.get('/:id', authenticate, getVillage);
 router.get('/:id/stats', authenticate, getVillageStats);
 router.post('/', authenticate, createVillage);
-router.put('/:id', authenticate, authorize('super_admin', 'district_officer', 'gp_admin'), updateVillage);
+router.put('/:id', authenticate, updateVillage);
 router.delete('/:id', authenticate, deleteVillage);
 
 module.exports = router;
