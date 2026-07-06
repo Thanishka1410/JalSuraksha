@@ -119,13 +119,6 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route ${req.originalUrl} not found`
-  });
-});
-
 if (process.env.NODE_ENV === 'production') {
   const path = require('path');
   app.use(express.static(path.join(__dirname, 'public')));
@@ -133,6 +126,13 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
 }
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`
+  });
+});
 
 app.use(errorHandler);
 
