@@ -26,9 +26,9 @@ const ComplaintSchema = new mongoose.Schema({
     required: [true, 'Complainant is required']
   },
   village: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Village',
-    required: [true, 'Village is required']
+    type: String,
+    required: [true, 'Village is required'],
+    trim: true
   },
   category: {
     type: String,

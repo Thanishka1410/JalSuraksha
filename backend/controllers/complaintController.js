@@ -37,7 +37,6 @@ const getComplaints = async (req, res) => {
     const total = await Complaint.countDocuments(query);
     const complaints = await Complaint.find(query)
       .populate('complainant', 'name email phone')
-      .populate('village', 'name code')
       .populate('assignedTo', 'name email')
       .skip((page - 1) * limit)
       .limit(parseInt(limit))
@@ -68,7 +67,6 @@ const getComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id)
       .populate('complainant', 'name email phone')
-      .populate('village', 'name code district')
       .populate('assignedTo', 'name email phone')
       .populate('timeline.updatedBy', 'name email');
 
@@ -305,7 +303,6 @@ const getMyComplaints = async (req, res) => {
 
     const total = await Complaint.countDocuments(query);
     const complaints = await Complaint.find(query)
-      .populate('village', 'name code')
       .populate('assignedTo', 'name email')
       .skip((page - 1) * limit)
       .limit(parseInt(limit))

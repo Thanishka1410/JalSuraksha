@@ -84,7 +84,7 @@ const ComplaintDetail: React.FC<ComplaintDetailProps> = ({ complaint, onClose, o
             </div>
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">{(complaint.village as any)?.name || 'N/A'}</span>
+              <span className="text-sm">{(complaint.village as any)?.name || complaint.village || 'N/A'}</span>
             </div>
           </div>
 
