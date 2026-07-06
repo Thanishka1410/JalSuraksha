@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, MapPin, Upload, X } from 'lucide-react';
 import Modal from '../common/Modal';
 import toast from 'react-hot-toast';
-import { apiGet } from '../../utils/api';
 import { useI18n } from '../../contexts/I18nContext';
 
-// Must match backend constants: COMPLAINT_CATEGORIES & PRIORITY_LEVELS
 const complaintSchema = z.object({
   category: z.enum(['leakage', 'no_water', 'dirty_water', 'low_pressure', 'other']),
   description: z.string().min(10, 'Description must be at least 10 characters'),
@@ -46,16 +44,11 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
   const [images, setImages] = useState<File[]>([]);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isCapturingLocation, setIsCapturingLocation] = useState(false);
-  const [villages, setVillages] = useState<{ _id: string; name: string; code: string }[]>([]);
-  const [villageSearch, setVillageSearch] = useState('');
-  const [showVillageDropdown, setShowVillageDropdown] = useState(false);
-  const villageRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
     reset,
     formState: { errors },
   } = useForm<ComplaintFormData>({
@@ -67,34 +60,6 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
   });
 
   const watchCategory = watch('category');
-
-  useEffect(() => {
-    if (isOpen) {
-      apiGet<{ data: { villages: { _id: string; name: string; code: string }[] } }>('/villages')
-        .then((res) => setVillages(res.data.villages))
-        .catch(() => {});
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (villageRef.current && !villageRef.current.contains(e.target as Node)) {
-        setShowVillageDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const filteredVillages = villages.filter((v) =>
-    v.name.toLowerCase().includes(villageSearch.toLowerCase())
-  );
-
-  const selectVillage = (v: { _id: string; name: string; code: string }) => {
-    setVillageSearch(`${v.name} (${v.code})`);
-    setValue('village', v._id);
-    setShowVillageDropdown(false);
-  };
 
   const captureLocation = () => {
     setIsCapturingLocation(true);
@@ -130,7 +95,6 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
     reset();
     setImages([]);
     setLocation(null);
-    setVillageSearch('');
     onClose();
   };
 
@@ -191,38 +155,12 @@ const ComplaintForm: React.FC<ComplaintFormProps> = ({ isOpen, onClose, onSubmit
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               {t.complaints.village}
             </label>
-            <div className="relative" ref={villageRef}>
-              <input
-                type="text"
-                value={villageSearch}
-                onChange={(e) => {
-                  setVillageSearch(e.target.value);
-                  setShowVillageDropdown(true);
-                  setValue('village', '');
-                }}
-                onFocus={() => setShowVillageDropdown(true)}
-                placeholder={t.complaints.villagePlaceholder}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              {showVillageDropdown && villageSearch && (
-                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                  {filteredVillages.length > 0 ? (
-                    filteredVillages.map((v) => (
-                      <button
-                        key={v._id}
-                        type="button"
-                        onClick={() => selectVillage(v)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
-                      >
-                        {v.name} ({v.code})
-                      </button>
-                    ))
-                  ) : (
-                    <div className="px-4 py-2 text-sm text-gray-500">{t.complaints.noVillagesFound}</div>
-                  )}
-                </div>
-              )}
-            </div>
+            <input
+              {...register('village')}
+              type="text"
+              placeholder={t.complaints.villagePlaceholder}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
             {errors.village && (
               <p className="mt-1 text-sm text-danger-500">{errors.village.message}</p>
             )}
